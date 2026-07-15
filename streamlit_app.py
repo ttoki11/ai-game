@@ -100,7 +100,7 @@ with seventeen_tab:
     st.write("- 밝고 활기찬 매력이 있어요.")
 
     st.subheader("👥 멤버들")
-    st.write("에스쿱스, 정한, 조슈아, 준, 호시, 원우, 우지, 디에잇, 민규, 도겸, 승관, 버논, 디에잇")
+    st.write("에스쿱스, 정한, 조슈아, 준, 호시, 원우, 우지, 민규, 도겸, 승관, 버논")
 
     st.subheader("🎵 대표 곡")
     st.write("- Very Nice")
