@@ -33,7 +33,6 @@ if "questions" not in st.session_state:
     st.session_state.score = 0
     st.session_state.current_index = 0
     st.session_state.answer_checked = False
-    st.session_state.user_choice = None
     st.session_state.finished = False
 
 
@@ -48,7 +47,6 @@ if st.session_state.finished:
         st.session_state.score = 0
         st.session_state.current_index = 0
         st.session_state.answer_checked = False
-        st.session_state.user_choice = None
         st.session_state.finished = False
         st.rerun()
     st.stop()
@@ -61,34 +59,27 @@ st.caption(f"점수: {st.session_state.score} / {len(st.session_state.questions)
 st.subheader(f"{st.session_state.current_index + 1}번 문제")
 st.write(f"뜻: {current_question['korean']}")
 
+widget_key = f"choice_{st.session_state.current_index}"
 choice = st.radio(
     "정답을 선택하세요.",
     current_question["choices"],
-    key="user_choice",
+    key=widget_key,
     index=None,
     horizontal=False,
 )
 
-if st.button("정답 확인"):
-    if choice is None:
-        st.warning("선택지를 먼저 골라주세요.")
+if choice is not None and not st.session_state.answer_checked:
+    if choice == current_question["answer"]:
+        st.session_state.score += 1
+        st.success("정답입니다! 👍")
     else:
-        if choice == current_question["answer"]:
-            st.session_state.score += 1
-            st.success("정답입니다! 👍")
-        else:
-            st.error(f"아쉽네요. 정답은 '{current_question['answer']}'입니다.")
-        st.session_state.answer_checked = True
-        st.session_state.user_choice = choice
+        st.error(f"아쉽네요. 정답은 '{current_question['answer']}'입니다.")
 
-if st.session_state.answer_checked:
+    st.session_state.answer_checked = True
     if st.session_state.current_index < len(st.session_state.questions) - 1:
-        if st.button("다음 문제"):
-            st.session_state.current_index += 1
-            st.session_state.answer_checked = False
-            st.session_state.user_choice = None
-            st.rerun()
+        st.session_state.current_index += 1
+        st.session_state.answer_checked = False
+        st.rerun()
     else:
-        if st.button("결과 보기"):
-            st.session_state.finished = True
-            st.rerun()
+        st.session_state.finished = True
+        st.rerun()
